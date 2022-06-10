@@ -4,16 +4,23 @@ class EmployeeWage
 {
     public $WAGE_PER_HR = 20;
     public $FULL_TIME_WORKING_HRS = 8;
+    public $PART_TIME_WORKING_HRS = 4;
+    public $IS_FULL_TIME = 2;
+    public $IS_PART_TIME = 1;
+    public $IS_ABSENT = 0;
 
     /**
-     * Function to Check Employee is Present or Absent
-     * Using rand() to generate the random of 0 or 1
+     * Function to Check Employee is full time or parttime
+     * Using rand() to generate the random of 0 to 2
      */
     function empAttendance()
     {
-        $random = rand(0, 1);
-        if ($random == 1) {
-            echo "Employee is Present \n";
+        $random = rand(0, 2);
+        if ($random == $this->IS_PART_TIME) {
+            echo "Part Time Employee\n";
+            return $this->PART_TIME_WORKING_HRS;
+        } elseif ($random == $this->IS_FULL_TIME) {
+            echo "Full Time Employee\n";
             return $this->FULL_TIME_WORKING_HRS;
         } else {
             echo "Employee is Absent\n";
