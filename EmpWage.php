@@ -8,8 +8,6 @@ class Employee_Wage
     public const IS_FULL_TIME = 2;
     public const IS_PART_TIME = 1;
     public const IS_ABSENT = 0;
-    public const WORKING_DAYS_PER_MONTH = 20;
-    public const WORKING_HOURS_PER_MONTH = 100;
 
     public $workingHrs = 0;
     public $monthlyWage = 0;
@@ -44,15 +42,15 @@ class Employee_Wage
 
     /**
      * Function to Calculate Daily Wage
-     * Non-Parameterized Function
+     * Passing WAGE_PER_HR as parameter
      * Printing the daily wage to the output
      * Calling attendance function to check employee attendance
      * returns daily wage of the employee
      */
-    function dailyWage()
+    function dailyWage($WAGE_PER_HR)
     {
         $this->workingHrs = $this->attendance();
-        $dailyWage = $this->WAGE_PER_HR * $this->workingHrs;
+        $dailyWage = $WAGE_PER_HR * $this->workingHrs;
         echo "Working Hours:: " . $this->workingHrs . "\n";
         echo "Daily Wage:: " . $dailyWage . "\n\n";
         return $dailyWage;
@@ -64,15 +62,15 @@ class Employee_Wage
      * Printing the Monthly wage to the output
      * Calling daily wage function to get daily wage
      */
-    function monthlyWage()
+    function monthlyWage($WORKING_DAYS_PER_MONTH, $WORKING_HOURS_PER_MONTH, $WAGE_PER_HR)
     {
         while (
-            $this->totalWorkingHours <= $this->WORKING_HOURS_PER_MONTH &&
-            $this->totalWorkingDays < $this->WORKING_DAYS_PER_MONTH
+            $this->totalWorkingHours <= $WORKING_HOURS_PER_MONTH &&
+            $this->totalWorkingDays < $WORKING_DAYS_PER_MONTH
         ) {
             $this->totalWorkingDays++;
             echo "Day:: " . $this->totalWorkingDays . "\n";
-            $dailyWage = $this->dailyWage();
+            $dailyWage = $this->dailyWage($WAGE_PER_HR);
             $this->monthlyWage += $dailyWage;
             $this->totalWorkingHours += $this->workingHrs;
         }
@@ -81,6 +79,24 @@ class Employee_Wage
         echo "Total Working Hours:: " . $this->totalWorkingHours . "\n";
         echo "Monthly Wage:: " . $this->monthlyWage . "\n\n";
     }
+
+    /**
+     * Function to take user input for wage per hour, max working days and 
+     * max working hours, calling monthly wage function and
+     * passing these constant variables as parameters
+     */
+    function userInput()
+    {
+        $name = readline('Enter Name of Company: ');
+        echo "Employee Wage Computation For\n";
+        echo "***** " . $name . " *****\n";
+        $WORKING_DAYS_PER_MONTH = readline('Enter Max Working Days Per Month: ');
+        $WORKING_HOURS_PER_MONTH = readline('Enter Max Working Hours Per Month: ');
+        $WAGE_PER_HR = readline('Enter Employee Wage Per Hour: ');
+        $this->monthlyWage($WORKING_DAYS_PER_MONTH, $WORKING_HOURS_PER_MONTH, $WAGE_PER_HR);
+    }
 }
-$employeeWage = new Employee_Wage();
-$employeeWage->monthlyWage();
+$company1 = new Employee_Wage();
+$company1->userInput();
+$company2 = new Employee_Wage();
+$company2->userInput();
