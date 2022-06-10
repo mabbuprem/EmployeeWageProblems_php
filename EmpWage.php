@@ -10,21 +10,27 @@ class EmployeeWage
     public $IS_ABSENT = 0;
 
     /**
-     * Function to Check Employee is full time or parttime
-     * Using rand() to generate the random of 0 to 2
+     * Function to Check Employee is Present or Absent,
+     * returns working hrs
      */
     function empAttendance()
     {
-        $random = rand(0, 2);
-        if ($random == $this->IS_PART_TIME) {
-            echo "Part Time Employee\n";
-            return $this->PART_TIME_WORKING_HRS;
-        } elseif ($random == $this->IS_FULL_TIME) {
-            echo "Full Time Employee\n";
-            return $this->FULL_TIME_WORKING_HRS;
-        } else {
-            echo "Employee is Absent\n";
-            return 0;
+        $empCheck = rand(0, 2);
+        switch ($empCheck) {
+            case 1:
+                echo "Part Time Employee\n";
+                return $this->PART_TIME_WORKING_HRS;
+                break;
+
+            case 2:
+                echo "Full Time Employee\n";
+                return $this->FULL_TIME_WORKING_HRS;
+                break;
+
+            default:
+                echo "Employee is Absent\n";
+                return 0;
+                break;
         }
     }
 
