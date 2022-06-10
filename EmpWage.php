@@ -8,6 +8,10 @@ class EmployeeWage
     public $IS_FULL_TIME = 2;
     public $IS_PART_TIME = 1;
     public $IS_ABSENT = 0;
+    public $MONTHLY_WORKING_DAYS = 20; 
+    public $COUNT_FULL_TIME=0;
+    public $COUNT_PART_TIME=0;
+    public $COUNT_ABSENT=0;
 
     /**
      * Function to Check Employee is Present or Absent,
@@ -18,17 +22,17 @@ class EmployeeWage
         $empCheck = rand(0, 2);
         switch ($empCheck) {
             case 1:
-                echo "Part Time Employee\n";
+                ++$this->COUNT_PART_TIME;
                 return $this->PART_TIME_WORKING_HRS;
                 break;
 
             case 2:
-                echo "Full Time Employee\n";
+                ++$this->COUNT_FULL_TIME;
                 return $this->FULL_TIME_WORKING_HRS;
                 break;
 
             default:
-                echo "Employee is Absent\n";
+                ++$this->COUNT_ABSENT;
                 return 0;
                 break;
         }
@@ -40,11 +44,24 @@ class EmployeeWage
      */
     function dailyWage()
     {
+        $count = 1;
         $hrs = $this->empAttendance();
         $dailyWage = $this->WAGE_PER_HR * $hrs;
-        echo "Daily Wage of Employee: " . $dailyWage;
+        return $dailyWage;
+    }
+
+    function monthlyWage(){
+        $monthlyWage=0;
+        for($i=1;$i<=$this->MONTHLY_WORKING_DAYS;$i++){
+            $dailyWage = $this->dailyWage();
+            $monthlyWage += $dailyWage;
+        }
+        echo "Days Employee was full time in month: " . $this->COUNT_FULL_TIME . "\n";
+        echo "Days Employee was Part time in month: " . $this->COUNT_PART_TIME . "\n";
+        echo "Days Employee was Absent in month: " . $this->COUNT_ABSENT . "\n";
+        echo "Monthly Wage of Employee: " . $monthlyWage;
     }
 }
 
 $emp = new EmployeeWage();
-$emp->dailyWage();
+$emp->monthlyWage();
