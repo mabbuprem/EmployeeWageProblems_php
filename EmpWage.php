@@ -1,7 +1,17 @@
 <?php
+/**
+ * Interface to declare the functions to be implemented
+ * inside the employee wage class
+ */
+interface computeEmpWage
+{
+    public function attendance();
+    public function dailyWage();
+    public function monthlyWage();
+}
 
 
-class Employee_Wage
+class Employee_Wage implements computeEmpWage
 {
     public const FULL_TIME_WORKING_HRS = 8;
     public const PART_TIME_WORKING_HRS = 4;
@@ -103,6 +113,9 @@ class Employee_Wage
     }
 }
 $company1 = new Employee_Wage(20, 20, 100);
-$company1->userInput();
 $company2 = new Employee_Wage(25, 25, 125);
-$company2->userInput();
+$company3 = new Employee_Wage(30, 30, 150);
+$empWageArray = array($company1, $company2, $company3);
+foreach ($empWageArray as $company) {
+    $company->userInput();
+}
