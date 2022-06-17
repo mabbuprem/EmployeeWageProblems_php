@@ -1,15 +1,7 @@
 <?php
-/**
- * Interface to declare the functions to be implemented
- * inside the employee wage class
- */
-interface computeEmpWage
-{
-    public function attendance();
-    public function dailyWage();
-    public function monthlyWage();
-}
 
+include "Employee_Wage_Interface.php";
+include "Company_Employee_Wage.php";
 
 class Employee_Wage implements computeEmpWage
 {
@@ -43,14 +35,14 @@ class Employee_Wage implements computeEmpWage
     {
         $empCheck = rand(0, 2);
         switch ($empCheck) {
-            case $this->IS_PART_TIME:
+            case Employee_Wage:: IS_PART_TIME:
                 echo "Part Time Employee\n";
-                return $this->PART_TIME_WORKING_HRS;
+                return Employee_Wage:: PART_TIME_WORKING_HRS;
                 break;
 
-            case $this->IS_FILL_TIME:
+            case Employee_Wage:: IS_FILL_TIME:
                 echo "Full Time Employee\n";
-                return $this->FULL_TIME_WORKING_HRS;
+                return Employee_Wage:: FULL_TIME_WORKING_HRS;
                 break;
 
             default:
@@ -64,7 +56,7 @@ class Employee_Wage implements computeEmpWage
      * Function to Calculate Daily Wage
      * Printing the daily wage to the output
      * Calling attendance function to check employee attendance
-     * returns daily wage of the employee
+     * @return int daily wage of the employee
      */
     function dailyWage()
     {
@@ -97,25 +89,8 @@ class Employee_Wage implements computeEmpWage
         echo "Total Working Days:: " . $this->totalWorkingDays . "\n";
         echo "Total Working Hours:: " . $this->totalWorkingHours . "\n";
         echo "Monthly Wage:: " . $this->monthlyWage . "\n\n";
-    }
-
-    /**
-     * Function to take user input for wage per hour, max working days and 
-     * max working hours, calling monthly wage function and
-     * passing these constant variables as parameters
-     */
-    function userInput()
-    {
-        $name = readline('Enter Name of Company: ');
-        echo "Employee Wage Computation For\n";
-        echo "***** " . $name . " *****\n";
-        $this->monthlyWage();
+        return $this->monthlyWage;
     }
 }
-$company1 = new Employee_Wage(20, 20, 100);
-$company2 = new Employee_Wage(25, 25, 125);
-$company3 = new Employee_Wage(30, 30, 150);
-$empWageArray = array($company1, $company2, $company3);
-foreach ($empWageArray as $company) {
-    $company->userInput();
-}
+$companyEmpWage = new CompanyEmpWage();
+$companyEmpWage->numOfCompanies();
