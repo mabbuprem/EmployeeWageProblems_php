@@ -19,7 +19,7 @@ class CompanyEmpWage
             $hours = readline('Enter Maximum working hours per month: ');
             echo "Employee Wage Computation For\n";
             echo "***** " . $name[$i] . " *****\n";
-            $employeeWage = new Employee_Wage($wage, $days, $hours);
+            $employeeWage = new Employee_Wage($name, $wage, $days, $hours);
             $totalWage[$i] = $employeeWage->monthlyWage();
         }
         for ($i = 0; $i < $n; $i++) {
