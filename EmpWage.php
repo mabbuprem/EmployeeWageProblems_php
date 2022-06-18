@@ -3,7 +3,6 @@
 include 'Employee_Wage_Interface.php';
 include 'Company_Employee_Wage.php';
 
-
 class Employee_Wage implements computeEmpWage
 {
     public const FULL_TIME_WORKING_HRS = 8;
@@ -18,6 +17,7 @@ class Employee_Wage implements computeEmpWage
     public $COMPANY_NAME;
 
     public $dailyWageArray = array();
+    public $totalWageArray = array();
 
     public $workingHrs = 0;
     public $monthlyWage = 0;
@@ -61,7 +61,7 @@ class Employee_Wage implements computeEmpWage
      * Function to Calculate Daily Wage
      * Printing the daily wage to the output
      * Calling attendance function to check employee attendance
-     * return int daily wage of the employee
+     * @return int daily wage of the employee
      */
     function dailyWage()
     {
@@ -93,12 +93,12 @@ class Employee_Wage implements computeEmpWage
             $this->totalWorkingHours += $this->workingHrs;
             $i++;
         }
-
+        $this->totalWageArray[$this->COMPANY_NAME] = $this->monthlyWage;
         echo "Total Working Days:: " . $this->totalWorkingDays . "\n";
         echo "Total Working Hours:: " . $this->totalWorkingHours . "\n";
         echo "Monthly Wage:: " . $this->monthlyWage . "\n\n";
         $this->showDailyWage($this->totalWorkingDays);
-        return $this->monthlyWage;
+        //return $this->monthlyWage;
     }
 
     /**
@@ -112,7 +112,23 @@ class Employee_Wage implements computeEmpWage
         for ($i = 0; $i < $totalWorkingDays; $i++) {
             echo $this->dailyWageArray[$i] . " ";
         }
-        echo "/n";
+        echo "\n\n";
+    }
+
+    /**
+     * Function to get total wage by company name
+     * Non-parameterized function
+     * No return values
+     */
+    function getTotalWage()
+    {
+        $companyName = readline('Enter Company Name to Search: ');
+        foreach ($this->totalWageArray as $key => $values) {
+            if ($key == $companyName) {
+                echo "\nCompany Found.\n";
+                echo $companyName . " Company total wage is: " . $values;
+            }
+        }
     }
 }
 $companyEmpWage = new CompanyEmpWage();

@@ -9,22 +9,19 @@ class CompanyEmpWage
      */
     public function numOfCompanies()
     {
-        $name = array();
-        $totalWage = array();
         $n = readline("Number of Companies: ");
         for ($i = 0; $i < $n; $i++) {
-            $name[$i] = readline('Enter Name of Company: ');
+            $name = readline('Enter Name of Company: ');
             $wage = readline('Enter Employee Wage Per Hour: ');
             $days = readline('Enter Maximum working days per month: ');
             $hours = readline('Enter Maximum working hours per month: ');
             echo "Employee Wage Computation For\n";
-            echo "***** " . $name[$i] . " *****\n";
+            echo "***** " . $name . " *****\n";
             $employeeWage = new Employee_Wage($name, $wage, $days, $hours);
-            $totalWage[$i] = $employeeWage->monthlyWage();
-        }
-        for ($i = 0; $i < $n; $i++) {
-            echo "\nName of Company:: " . $name[$i];
-            echo "\nTotal Salary:: " . $totalWage[$i];
+            $employeeWage->monthlyWage();
+            if ($i == ($n - 1)) {
+                $employeeWage->getTotalWage();
+            }
         }
     }
 }
