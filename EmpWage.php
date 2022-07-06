@@ -1,135 +1,132 @@
 <?php
 
-include 'Employee_Wage_Interface.php';
-include 'Company_Employee_Wage.php';
+include "IEmployeeWage.php";
+include "CompanyLists.php";
 
-class Employee_Wage implements computeEmpWage
+class EmployeeWage implements IEmployeeWage
 {
-    public const FULL_TIME_WORKING_HRS = 8;
-    public const PART_TIME_WORKING_HRS = 4;
-    public const IS_FILL_TIME = 2;
-    public const IS_PART_TIME = 1;
-    public const IS_ABSENT = 0;
 
-    public $WAGE_PER_HR;
-    public $WORKING_DAYS_PER_MONTH;
-    public $WORKING_HOURS_PER_MONTH;
-    public $COMPANY_NAME;
+    const IS_PRESENT = 1;
+    const IS_PARTTIME = 2;
+    const FULL_TIME_HOURS = 8;
+    const PART_TIME_HOURS = 4;
 
-    public $dailyWageArray = array();
-    public $totalWageArray = array();
-
-    public $workingHrs = 0;
-    public $monthlyWage = 0;
-    public $totalWorkingDays = 0;
+    public $maxWorkingDays = 0;
+    public $maxWorkingHours = 0;
+    public $wagePerHour = 0;
     public $totalWorkingHours = 0;
-
-    public function __construct($name, $wage, $days, $hours)
+    public $workingDays = 1;
+    public $monthlyWage = 0;
+    public $workingHours = 0;
+    public $array = [];
+    public $array1 = [];
+    public $companyName;
+    public $dailyWage = 0;
+    public $companyArray = [];
+    static function welcomeMsg()
     {
-        $this->COMPANY_NAME = $name;
-        $this->WAGE_PER_HR = $wage;
-        $this->WORKING_DAYS_PER_MONTH = $days;
-        $this->WORKING_HOURS_PER_MONTH = $hours;
+        echo "---------Welcome to Employee Wage builder------------\n";
     }
-    /**
-     * Function to Check Employee is Present or Absent
-     * Returns working hrs
-     * Non-Parameterized Function
-     */
-    function attendance()
+
+
+
+    public function __construct($companyName, $wagePerHour, $maxWorkingDays, $maxWorkingHours)
     {
-        $empCheck = rand(0, 2);
-        switch ($empCheck) {
-            case Employee_Wage:: IS_PART_TIME:
-                echo "Part Time Employee\n";
-                return Employee_Wage:: PART_TIME_WORKING_HRS;
-                break;
 
-            case Employee_Wage:: IS_FILL_TIME:
-                echo "Full Time Employee\n";
-                return Employee_Wage:: FULL_TIME_WORKING_HRS;
-                break;
+        $this->companyName = $companyName;
+        $this->maxWorkingDays = $maxWorkingDays;
+        $this->maxWorkingHours = $maxWorkingHours;
+        $this->wagePerHour = $wagePerHour;
+        $this->companyArray = [$this->companyName, $this->wagePerHour, $this->maxWorkingDays, $this->maxWorkingHours];
+    }
 
+    //function to check employee attendence
+    function attendenceCheck()
+    {
+        $random = rand(0, 3);                   //random value to check attendence
+        switch ($random) {                       //switch case condition
+            case 1:
+                // echo "Employee is Present\n";
+                $this->workingHours = EmployeeWage::FULL_TIME_HOURS;
+                break;
+            case 2:
+                // echo "Employee is PartTime\n";
+                $this->workingHours = EmployeeWage::PART_TIME_HOURS;
+                break;
             default:
-                echo "Employee is Absent\n";
-                return 0;
-                break;
+                // echo "Employee is Absent\n";
+                $this->workingHours = 0;            //updated values in UC8
         }
+        $this->dailyWage = $this->workingHours * $this->wagePerHour;
+        //   echo "The daily wage of the employee is : " . $this->dailyWage . "\n";
     }
 
-    /**
-     * Function to Calculate Daily Wage
-     * Printing the daily wage to the output
-     * Calling attendance function to check employee attendance
-     * @return int daily wage of the employee
-     */
-    function dailyWage()
+    //function to store daily wage along with total wage
+    function printArray()
     {
-        $this->workingHrs = $this->attendance();
-        $dailyWage = $this->WAGE_PER_HR * $this->workingHrs;
-        echo "Working Hours:: " . $this->workingHrs . "\n";
-        echo "Daily Wage:: " . $dailyWage . "\n\n";
-        return $dailyWage;
-    }
-
-    /**
-     * Function to Calculate Monthly Wage
-     * Non-Parameterized Function
-     * Printing the Monthly wage to the output
-     * Calling daily wage function to get daily wage
-     */
-    function monthlyWage()
-    {
-        $i = 0;
-        while (
-            $this->totalWorkingHours <= $this->WORKING_HOURS_PER_MONTH &&
-            $this->totalWorkingDays < $this->WORKING_DAYS_PER_MONTH
-        ) {
-            $this->totalWorkingDays++;
-            echo "Day:: " . $this->totalWorkingDays . "\n";
-            $dailyWage = $this->dailyWage();
-            $this->dailyWageArray[$i] = $dailyWage;
-            $this->monthlyWage += $dailyWage;
-            $this->totalWorkingHours += $this->workingHrs;
-            $i++;
+        //Printing values from the array 
+        foreach ($this->array as $this->workingDays => $this->dailyWage) {
+            echo "[Day" . $this->workingDays . "] => Rs." . $this->dailyWage . " \n";
         }
-        $this->totalWageArray[$this->COMPANY_NAME] = $this->monthlyWage;
-        echo "Total Working Days:: " . $this->totalWorkingDays . "\n";
-        echo "Total Working Hours:: " . $this->totalWorkingHours . "\n";
-        echo "Monthly Wage:: " . $this->monthlyWage . "\n\n";
-        $this->showDailyWage($this->totalWorkingDays);
-        //return $this->monthlyWage;
+        echo "Total monthly wage for the employee is : Rs. " . $this->monthlyWage . "\n";
     }
 
-    /**
-     * Function to print daily wage stored in the array
-     * Non-parameterized function
-     * No return values
-     */
-    function showDailyWage($totalWorkingDays)
+    //function to calculate employee wage
+    function calculateEmployeeWage()
     {
-        echo "Daily Wage:: ";
-        for ($i = 0; $i < $totalWorkingDays; $i++) {
-            echo $this->dailyWageArray[$i] . " ";
+        // condition for maxworkingday and Max working hour
+        while ($this->workingDays < $this->maxWorkingDays && $this->totalWorkingHours < $this->maxWorkingHours) {
+            // echo "Day " . $this->workingDays . "\n";
+            EmployeeWage::attendenceCheck();            //calling employee attendance function
+            //calculating total working hours    
+            $this->workingDays++;
+            $this->totalWorkingHours = $this->totalWorkingHours + $this->workingHours;            //Adding hours in loop
+            //  echo $totalWorkingHours." Hours";
+            $this->array[$this->workingDays] = $this->dailyWage;              //storing working days and total working hours in associative array
         }
-        echo "\n\n";
+        // $this->printArray();
+        // foreach ($this->array as $this->workingDays => $this->dailyWage) {
+        //     echo "[Day" . $this->workingDays . "] => Rs." . $this->dailyWage . " \n";
+        // }
     }
 
-    /**
-     * Function to get total wage by company name
-     * Non-parameterized function
-     * No return values
-     */
-    function getTotalWage()
+    //function to print employee wage
+    function printEmployeeWage()
     {
-        $companyName = readline('Enter Company Name to Search: ');
-        foreach ($this->totalWageArray as $key => $values) {
-            if ($key == $companyName) {
-                echo "\nCompany Found.\n";
-                echo $companyName . " Company total wage is: " . $values;
+        //echo "Employee Wage for " . $this->companyName . "\n";
+        EmployeeWage::calculateEmployeeWage();      //calling function to calculate employee wage
+        //calculation of EmployeeWage
+        // echo "Total working Hours = " . $this->totalWorkingHours . "\n";
+        $this->monthlyWage = $this->totalWorkingHours * $this->wagePerHour;
+        //echo "Employee total monthly wage is : $" . $this->monthlyWage . "\n";
+        //  EmployeeWage::printArray();         //calling function to print array values
+    }
+
+    public function empArray()
+    {
+
+        $this->array1[$this->companyName] = $this->companyArray;
+        foreach ($this->array1 as $this->companyName => $this->companyArray) {
+            EmployeeWage::printEmployeeWage();
+            $this->array[$this->workingDays] = $this->dailyWage;              //storing working days and total working hours in associative array
+            echo "[ " . $this->companyName . "[ \n";
+            foreach ($this->array as $this->workingDays => $this->dailyWage) {
+                //echo "[Day" . $this->workingDays . "] => Rs." . $this->dailyWage . " \n";
             }
+            echo "Total monthly wage: Rs. " . $this->monthlyWage . " ]";
         }
     }
+     function dailyWage(){
+         $this->dailyWage = $this->workingHours * $this->wagePerHour;
+         echo "The daily wage of the employee is : ".$this->dailyWage();
+     }
+
 }
-$companyEmpWage = new CompanyEmpWage();
-$companyEmpWage->numOfCompanies();
+
+$empWage = new MultipleCompanies();
+$empWage->companyArray();
+
+?>
+
+
+
