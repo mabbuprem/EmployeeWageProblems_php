@@ -111,7 +111,7 @@ class EmployeeWage implements IEmployeeWage
             $this->array[$this->workingDays] = $this->dailyWage;              //storing working days and total working hours in associative array
             echo "[ " . $this->companyName . "[ \n";
             foreach ($this->array as $this->workingDays => $this->dailyWage) {
-                //echo "[Day" . $this->workingDays . "] => Rs." . $this->dailyWage . " \n";
+                echo "[Day" . $this->workingDays . "] => Rs." . $this->dailyWage . " \n";
             }
             echo "Total monthly wage: Rs. " . $this->monthlyWage . " ]";
         }
